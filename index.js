@@ -17,7 +17,7 @@ app.get("/",(req,res) => {
    <img src="https://files.jcmainclr.xyz/uploads/main.png" >
    <p>Hello uh this site is just a development or making some test stuff yeah</p>
    <a href="/api">Api</a> 
-   <a href='https://github.com/JcNoobLol/dog-shit-api-page/tree/main/2024'>File List</a>
+   <a href='https://github.com/JcNoobLol/dog-shit-api-page/tree/main/wp-content/2024'>File List</a>
  </section>
  </body>
  <style>
@@ -67,8 +67,8 @@ app.get("/api/v1/yt_latestpost",async(req,res) => {
     }
 })
 app.get("/api/v1/memes",async(req,res) => {
-    let response = await superagent.get('https://www.reddit.com/r/memes.json')  .set("User-Agent", "httprequest")
-    const data = response.body;
+    let main = await prorss.parseURL(`https://www.reddit.com/r/memes.json`).catch(console.error)
+    const data = main.body;
     if (response.status === 200) {
       const memeData = data.data.children[Math.floor(Math.random() * data.data.children.length)].data;
         res.json({title: memeData.title,img: memeData.url})
@@ -191,4 +191,6 @@ font-size: 20px;
 <script src="https://files.jcmainclr.xyz/scripts/loader.js"></script>
     `,404)
 })
-app.get('/2024')
+app.get('/2024',(req,res)=> {
+    res.send(``)
+})
