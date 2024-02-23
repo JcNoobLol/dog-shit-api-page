@@ -2,6 +2,7 @@ let express = require("express");let app = express(); app.listen(3000); console.
 let rss = require("rss-parser");
 let superagent = require("superagent");
 let prorss = new rss()
+let {GoogleGenerativeAI} = require("@google/generative-ai")
 app.use(express.json());
 let path = require("path")
 app.get("/",(req,res) => {
@@ -66,16 +67,6 @@ app.get("/api/v1/yt_latestpost",async(req,res) => {
 
     }
 })
-app.get("/api/v1/memes",async(req,res) => {
-    let main = await prorss.parseURL(`https://www.reddit.com/r/memes.json`).catch(console.error)
-    const data = main.body;
-    if (response.status === 200) {
-      const memeData = data.data.children[Math.floor(Math.random() * data.data.children.length)].data;
-        res.json({title: memeData.title,img: memeData.url})
-    }
-  
-  })
-  
   app.get("/loptop-specs",(req,res) => {
 
     res.send(`
@@ -146,6 +137,21 @@ app.get("/api/v1/memes",async(req,res) => {
 app.get('/api',(req,res) => {
     res.json({msg: 'api page has been temporary down '})
 })
+app.get("/api/v2/gapi",async(req,res) => {
+    let MODEL = 'gemini-pro';
+let api_key = 'AIzaSyB92vVZnIFe1DHEH0WoBi0vSEpH4b75huY'
+let g_ch = '1210584579430158376';
+let ai= new GoogleGenerativeAI(api_key);
+let model  = ai.getGenerativeModel({model: MODEL});
+   let c = req.query.c
+  try{
+  //the cooking stuff 🔥
+   let  respones  =  await model.generateContentStream(c)
+ res.json ({res: ((await respones.response).text())})
+  }catch(e){
+    console.log(e)
+  }
+})
 app.get("*",(req,res) => {
     res.send(`
 <head>
@@ -190,7 +196,4 @@ font-size: 20px;
 
 <script src="https://files.jcmainclr.xyz/scripts/loader.js"></script>
     `,404)
-})
-app.get('/2024',(req,res)=> {
-    res.send(``)
 })
